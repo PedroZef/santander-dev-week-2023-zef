@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-@Entity(name = "tb_account")
+@Entity(name = "tb_accounts")
 public class Account {
 
     @Id
@@ -14,6 +14,7 @@ public class Account {
     @Column(unique = true)
     private String number;
 
+    @Column(nullable = false) 
     private String agency;
 
     @Column(precision = 13, scale = 2)

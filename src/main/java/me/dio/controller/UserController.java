@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/users")
@@ -24,13 +26,32 @@ public class UserController {
        return ResponseEntity.ok(user);
     }
 
+    @GetMapping()
+    public ResponseEntity<List<User>> findUsers() {
+        return ResponseEntity.ok(userService.getUsers());
+    }
+
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User userToCreate) {
-        var userCreated = userService.create(userToCreate);
+    public ResponseEntity<User> createdUser(@RequestBody User user) {
+        User userPost = userService.createUser(user);
+
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(userCreated.getId())
+                .buildAndExpand(userPost.getId())
                 .toUri();
-        return ResponseEntity.created(location).body(userCreated);
+        return ResponseEntity.created(location).body(userPost);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+        User userUpdate = userService.updateUser(id, user);
+
+        return ResponseEntity.ok(userUpdate);
+    }
+    
 }
